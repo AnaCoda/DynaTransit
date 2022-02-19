@@ -1,24 +1,75 @@
-{{"decoupled-map"|googlemap_js(37.4419, -122.1419, markers=[(37.4419,
--122.1419)])}} {{mymap.js}} {{sndmap.js}}
-{% extends "base.html" %}
-{% block content %}
-    <h1>Flask Google Maps Example</h1>
+<html>  
+<head>
+<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"type="text/javascript" charset="utf-8"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"type="text/javascript" charset="utf-8"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css"href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+</head>
+  
+<body style='margin: 0'>
+<div style="width: 100%; height: 100%" id="mapContainer"></div>
 
-    <h2>Template function centered, no marker</h2>
-    {{googlemap("simple-map", 37.4419, -122.1419)}}
+<script>	
+      // Initialize the platform object:
+      var platform = new H.service.Platform({
+        'apikey': 'rdE07wGvlGAMwAOwQ52_gRcyKvm9uqsCC8agWPbgkqY'
+      });
+	  
+      const lat1 = {{ lat1 }};
+      const long1 = {{ long1 }};
+      const lat2 = {{ lat2 }};
+      const long2 = {{ long2 }};
+     
+	// Obtain the default map types from the platform object
+      var maptypes = platform.createDefaultLayers();
 
-    <h2>Template filter decoupled with single marker</h2>
-    {{"decoupled-map"|googlemap_html(37.4419, -122.1419)}}
+      // Initialize a map:
+      var map = new H.Map(
+        document.getElementById('mapContainer'),
+        maptypes.raster.terrain.map,
+        {
+          zoom: 10,
+          center: { lat: (lat1 + lat2)/2, lng: (long1 + long2)/2 }  
+        });
+		
+	// Enable the event system on the map instance:
+	  var mapEvents = new H.mapevents.MapEvents(map);
+	
+	// Add event listener:
+	  map.addEventListener('tap', function(evt) {
+    // Log 'tap' and 'mouse' events:
+      console.log(evt.type, evt.currentPointer.type); 
+});
 
-    <h2>Template function with multiple markers</h2>
-    {% with map=googlemap_obj("another-map", 37.4419, -122.1419,
-    markers=[(37.4419, -122.1419), (37.4300, -122.1400)]) %} {{map.html}}
-    {{map.js}} {% endwith %}
+	// Instantiate the default behavior, providing the mapEvents object:
+	 var behavior = new H.mapevents.Behavior(mapEvents);
 
-    <h2>First map generated in view</h2>
-    {{mymap.html}}
 
-    <h2>Second map generated in view</h2>
-    <h3>Example for different icons in multiple markers with infoboxes</h3>
-    {{sndmap.html}}
-{% endblock content %}
+
+     
+	//window.addEventListener('resize',()=> get.ViewProt().resize())
+    //change the color of the marker to be red
+	var marker1 = new H.map.Marker({ lat: lat1, lng: long1});
+	var marker2 = new H.map.Marker({ lat: lat2, lng: long2});
+		
+	// Add the marker to the map:
+	map.addObject(marker1);
+    // Add the marker to the map:
+	map.addObject(marker2);
+	
+	// Create the default UI:
+	var ui = H.ui.UI.createDefault(map, maptypes);
+		
+// Create an info bubble object at a specific geographic location:
+var bubble = new H.ui.InfoBubble({ lng: long1, lat: lat1 }, {
+                content: '<b>Dewas</b>'
+             });
+
+// Add info bubble to the UI:
+ui.addBubble(bubble);
+
+</script>
+</body>
+</html>

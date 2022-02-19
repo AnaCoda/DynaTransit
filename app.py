@@ -1,13 +1,10 @@
-#pip install flask-googlemaps
 #pip install flask
-
-from flask import Flask, render_template
-from flask_googlemaps import GoogleMaps
-from flask_googlemaps import Map
+#pip install geopy
+from flask import Flask, render_template, request, redirect, url_for
+from geopy.geocoders import Nominatim
+geolocator = Nominatim(user_agent="app")
 
 app = Flask(__name__)
-GoogleMaps(app, key="AIzaSyBYFFNUHHvnoDLwhT9ARf0V680AldMicQQ")
-
 
 @app.route("/")
 @app.route("/home")
@@ -22,35 +19,22 @@ def register():
 def login():
     return render_template('login.html')
 
-@app.route("/map")
+@app.route("/mapview", methods=['GET', 'POST'])
 def mapview():
-    # creating a map in the view
-    mymap = Map(
-        identifier="view-side",
-        lat=37.4419,
-        lng=-122.1419,
-        markers=[(37.4419, -122.1419)]
-    )
-    sndmap = Map(
-        identifier="sndmap",
-        lat=37.4419,
-        lng=-122.1419,
-        markers=[
-          {
-             'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-             'lat': 37.4419,
-             'lng': -122.1419,
-             'infobox': "<b>Hello World</b>"
-          },
-          {
-             'icon': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-             'lat': 37.4300,
-             'lng': -122.1400,
-             'infobox': "<b>Hello World from other place</b>"
-          }
-        ]
-    )
-    return render_template('map.html', mymap=mymap, sndmap=sndmap)
+    if request.method == 'POST':
+        currentAddress = request.form['current-address']
+        currentLocation = geolocator.geocode(currentAddress)
+        
+        destinationAddress = request.form['destination-address']
+        destinationLocation = geolocator.geocode(destinationAddress)
+        
+        lat1=currentLocation.latitude
+        long1=currentLocation.longitude
+        lat2=destinationLocation.latitude
+        long2=destinationLocation.longitude
+        #return str(lat1) + " " + str(long1) + " " + str(lat2) + " " + str(long2)
+        return render_template('map.html',lat1=lat1,long1=long1,lat2=lat2,long2=long2)
+    return render_template('select.html')
 
 if __name__ == '__main__':
     app.run(debug=True) 

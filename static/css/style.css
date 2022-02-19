@@ -1,3 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
 .two-grid
 {
     display: grid;
@@ -12,5 +18,48 @@
   top: 40%;
   left: 25%;
   transform: translate(-25%, -40%);
+}
+.map-information
+{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    margin: 10px;
+}
+.title
+{
+  font-size: 2.5em;
+  font-weight: 400;
+  text-align: center;
+  letter-spacing:-3px;
+}
+.image-fullheight
+{
+  height: 100vh;
+  width: auto;
+}
+.subtitle
+{
+  font-size: 1.5em;
+  font-weight: 400;
+  text-align: center;
+  letter-spacing:-1px;
+}
+.homepage-button
+{
+  background-color: #368538;
+  border-radius: 12px;
+  height: 20%;
+  width: 100%;
+  margin-top: 20px;
+}
+.homepage-button:hover
+{
+  background-color: #2d8331;
+}
+.right-side
+{
+  position: absolute;
+  right: 0;
 
 }
