@@ -39,7 +39,17 @@ def closestStop(locationPoint, stopPointsDF):
     tuplePoint = (locationPoint.x, locationPoint.y)
     # Get the index of the nearest
     min_idx = cdist([tuplePoint], stopPointsList).argmin()
-    return stopPointsDF[min_idx:min_idx+1]
+    return stopPointsDF[min_idx:min_idx+1].first
+
+# Types: Point, DF (getActiveStopPoints return)
+def closestStops(locationPoint, stopPointsDF, amount=3):
+    # Transform into a list of tuples ofr each point
+    stopPointsList = list((p.x, p.y) for p in stopPointsDF['point'])
+    tuplePoint = (locationPoint.x, locationPoint.y)
+    # Get the index of the nearest
+    min_idxs = np.argsort(cdist([tuplePoint], stopPointsList))[0][:amount]
+    closests = stopPointsDF[stopPointsDF.index.isin(min_idxs)]
+    print(closests)
 
 
-print(closestStop(Point(51.150250, -114.156370), getActiveStopPoints()))
+print(closestStops(Point(51.150250, -114.156370), getActiveStopPoints()))
