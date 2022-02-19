@@ -2,6 +2,7 @@
 # pip install pandas
 # pip install sodapy
 # pip install shapely
+# pip install geopy
 
 import pandas as pd
 import numpy as np
@@ -10,6 +11,8 @@ import json
 
 from scipy.spatial.distance import cdist
 from shapely.geometry import Point
+import geopy.distance
+from sklearn.cluster import KMeans
 
 def connectToBusAPI():
     # No authentication needed
@@ -51,5 +54,17 @@ def closestStops(locationPoint, stopPointsDF, amount=3):
     closests = stopPointsDF[stopPointsDF.index.isin(min_idxs)]
     print(closests)
 
+def kmBetweenPoints(Point1, Point2):
+    return geopy.distance.vincenty((Point1.x, Point1.y), (Point2.x, Point2.y))
+
+departures = [Point(51.150250, -114.156370), Point(51.145810, -114.152068), Point(51.142220, -114.109543), Point(51.141654, -114.108165)]
+
+def pointsListToDF(pointsList):
+    pointsData = {'x':[p.x for p in pointsList], 'y':[p.y for p in pointsList]}
+    df = pd.DataFrame(pointsData)
+    return df
 
 print(closestStops(Point(51.150250, -114.156370), getActiveStopPoints()))
+
+DeparturesNP = np.array(pointsListToDF(departures))
+print(DeparturesNP)
