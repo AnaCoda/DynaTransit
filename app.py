@@ -14,9 +14,16 @@ GoogleMaps(app, key="AIzaSyBYFFNUHHvnoDLwhT9ARf0V680AldMicQQ")
 def home():
     return render_template('home.html')
 
+@app.route("/register")
+def register():
+    return render_template('register.html')
+
+@app.route("/login")
+def login():
+    return render_template('login.html')
 
 @app.route("/map")
-def map():
+def mapview():
     # creating a map in the view
     mymap = Map(
         identifier="view-side",
@@ -43,8 +50,7 @@ def map():
           }
         ]
     )
-    return render_template('home.html', mymap=mymap, sndmap=sndmap)
-
+    return render_template('map.html', mymap=mymap, sndmap=sndmap)
 
 if __name__ == '__main__':
     app.run(debug=True) 
