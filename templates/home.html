@@ -1,19 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-
 <!-- Page Content -->
 <!-- Split the page into two parts  -->
-<div class = "container two-grid">
+<div class = "two-grid">
     <div class = "left-panel">
       <center>
         <div class = 'centered-middle'>
-          <p>asdas</p>
-        </div>
+          <h1 class = "title">DynaTransit</h1>
+          <p class = "subtitle">The best way to find your way around</p>
+          <img src = "{{ url_for('static', filename='images/logo.png') }}" alt = "DynaTransit Logo" class = "logo"> 
+          <!-- make a button that acts as a link -->
+          <a href = "{{ url_for('login') }}" style = "background-color:#67af69" class = "btn btn-primary homepage-button btn-lg">Login</a>
+          <a href = "{{ url_for('register') }}" class = "btn btn-primary homepage-button btn-lg">Register</a>
+
       </center>
     </div>
     <div class = "right-panel">
       <!-- get the image of bushand.jpg -->
-      <img src = {{ url_for('static',filename="img\bushand.jpg") }}>
+      <img class = "image-fullheight right-side" src = "../static/img/bushand.jpg">
     </div>
 
 </div>
