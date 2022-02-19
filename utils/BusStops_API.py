@@ -11,12 +11,12 @@ def connectToBusAPI():
     return client
 
 
-def getAllStopsAsDF():
+def getAllActiveStopsAsDF():
     cClient = connectToBusAPI()
     # There are less than 8000 stops so this will get them all
-    results = cClient.get("muzh-c9qc", limit=8000)
+    results = cClient.get("muzh-c9qc", where="STATUS='ACTIVE'", limit=8000)
     # Convert to pandas DataFrame
     results_df = pd.DataFrame.from_records(results)
     return results_df
 
-print(getAllStopsAsDF())
+print(getAllActiveStopsAsDF())
