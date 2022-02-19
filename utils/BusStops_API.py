@@ -15,6 +15,7 @@ from shapely.geometry import Point
 import geopy.distance
 from sklearn.cluster import KMeans
 from sklearn.cluster import DBSCAN
+import HERERouting_API
 
 def connectToBusAPI():
     # No authentication needed
@@ -108,4 +109,4 @@ departures = [Point(51.150250, -114.156370), Point(51.145810, -114.152068), Poin
 arrivals = [Point(51.047310, -114.057970), Point(51.0460, 114.0574), Point(51.1592957666, -114.066441361), Point(51.1084, 114.0416)]
 allPoints = departures + arrivals
 # Simply an example
-calculateStops(allPoints)
+HERERouting_API.findSequence(calculateStops(allPoints))
