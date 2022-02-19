@@ -28,7 +28,8 @@ def getAllActiveStopsAsDF():
 def getActiveStopPoints():
     results_df = getAllActiveStopsAsDF()
     print(results_df)
-    results_df['point'] = results_df['point'].apply(lambda point : Point(point['coordinates'][0],point['coordinates'][1]))
+    # Create a latitude, longitude point and change the dataset
+    results_df['point'] = results_df['point'].apply(lambda point : Point(point['coordinates'][1],point['coordinates'][0]))
     return results_df
 
 
