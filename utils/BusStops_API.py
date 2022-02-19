@@ -32,5 +32,14 @@ def getActiveStopPoints():
     results_df['point'] = results_df['point'].apply(lambda point : Point(point['coordinates'][1],point['coordinates'][0]))
     return results_df
 
+# Types: Point, DF (getActiveStopPoints return)
+def closestStop(locationPoint, stopPointsDF):
+    # Transform into a list of tuples ofr each point
+    stopPointsList = list((p.x, p.y) for p in stopPointsDF['point'])
+    tuplePoint = (locationPoint.x, locationPoint.y)
+    # Get the index of the nearest
+    min_idx = cdist([tuplePoint], stopPointsList).argmin()
+    return stopPointsDF[min_idx:min_idx+1]
 
-print(getActiveStopPoints())
+
+print(closestStop(Point(51.150250, -114.156370), getActiveStopPoints()))
