@@ -1,6 +1,7 @@
 import bcrypt
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for,session
 from dynatransit import db, loginManager, app
+from dynatransit.models import User, Trip
 from geopy.geocoders import Nominatim
 from functools import wraps
 
