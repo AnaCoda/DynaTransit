@@ -1,10 +1,10 @@
-#pip install flask
-#pip install geopy
+import bcrypt
 from flask import Flask, render_template, request, redirect, url_for
+from dynatransit import db, loginManager, app
 from geopy.geocoders import Nominatim
-geolocator = Nominatim(user_agent="app")
+from functools import wraps
 
-app = Flask(__name__)
+geolocator = Nominatim(user_agent="app")
 
 @app.route("/")
 @app.route("/home")
@@ -35,6 +35,3 @@ def mapview():
         #return str(lat1) + " " + str(long1) + " " + str(lat2) + " " + str(long2)
         return render_template('map.html',lat1=lat1,long1=long1,lat2=lat2,long2=long2)
     return render_template('select.html')
-
-if __name__ == '__main__':
-    app.run(debug=True) 
