@@ -73,42 +73,29 @@
                     {% endif %}                    
                 </div>
                 <div class = "form-group">
-                    {{ form.startTimeFrom.label(class="form-control-label") }}
-                    {% if form.startTimeFrom.errors %}
-                        {{ form.startTimeFrom(class="form-control form-control-lg is-invalid") }}
+                    {{ form.arrivalTimeFrom.label(class="form-control-label") }}
+                    {% if form.arrivalTimeFrom.errors %}
+                        {{ form.arrivalTimeFrom(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in form.startTimeFrom.errors %}
+                            {% for error in form.arrivalTimeFrom.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.startTimeFrom(class="form-control form-control-lg") }}
+                        {{ form.arrivalTimeFrom(class="form-control form-control-lg") }}
                     {% endif %}                    
                 </div>
                 <div class = "form-group">
-                    {{ form.startTimeTo.label(class="form-control-label") }}
-                    {% if form.startTimeTo.errors %}
-                        {{ form.startTimeTo(class="form-control form-control-lg is-invalid") }}
+                    {{ form.arrivalTimeTo.label(class="form-control-label") }}
+                    {% if form.arrivalTimeTo.errors %}
+                        {{ form.arrivalTimeTo(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in form.startTimeTo.errors %}
+                            {% for error in form.arrivalTimeTo.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.startTimeTo(class="form-control form-control-lg") }}
-                    {% endif %}                    
-                </div>
-                <div class = "form-group">
-                    {{ form.arrivalTime.label(class="form-control-label") }}
-                    {% if form.arrivalTime.errors %}
-                        {{ form.arrivalTime(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.arrivalTime.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.arrivalTime(class="form-control form-control-lg") }}
+                        {{ form.arrivalTimeTo(class="form-control form-control-lg") }}
                     {% endif %}                    
                 </div>
                 <div class = "form-group">

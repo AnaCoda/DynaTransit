@@ -79,7 +79,6 @@ def mapview():
         #time ranges:
         arrivalTimeRangeStart = form.arrivalTimeFrom.data
         arrivalTimeRangeEnd = form.arrivalTimeTo.data
-        departureTime = form.departureTime.data
                 
         departureDate = form.date.data
         
@@ -88,8 +87,8 @@ def mapview():
         lat2=destinationLocation.latitude
         long2=destinationLocation.longitude
         newTrip = Trip(arrivalLocation=currentAddress, arrivalLong=long1, arrivalLat=lat1, departureLocation=destinationAddress, departureLong=long2, departureLat=lat2, 
-                       arrivalTimeRangeStart=str(arrivalTimeRangeStart), arrivalTime=str(arrivalTimeRangeEnd), 
-                       departureTime=str(departureTime), departureDate=departureDate, userID=0)
+                       arrivalTimeRangeStart=str(arrivalTimeRangeStart), arrivalTimeRangeEnd=str(arrivalTimeRangeEnd), 
+                    departureDate=departureDate, userID=0)
         db.session.add(newTrip)
         db.session.commit()
         #return str(lat1) + " " + str(long1) + " " + str(lat2) + " " + str(long2)

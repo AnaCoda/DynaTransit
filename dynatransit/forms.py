@@ -24,11 +24,9 @@ class RegistrationForm(FlaskForm):
 class FindTrip(FlaskForm):
     start = StringField ('From Address:')
     end = StringField('To Address:')
-    
-    startTimeFrom = TimeField('Departure Time From:')
-    startTimeTo = TimeField('Departure Time To:')
-   
-    arrivalTime = TimeField('Arrival Time:')
+       
+    arrivalTimeFrom = TimeField('Arrival Time From:')
+    arrivalTimeTo = TimeField('Arrival Time To:')
    
     date  = DateField('Date',format='%Y-%m-%d')
     
