@@ -21,16 +21,61 @@
     this.geocoder = this.platform.getGeocodingService();
     var routingParameters = {{destinationList|safe}};
     routingParameters.via =  new H.service.Url.MultiValueQueryParameter(routingParameters.via);
-     
+    var routeInstructionsContainer = document.getElementById('panel');
     // Obtain the default map types from the platform object
     var maptypes = platform.createDefaultLayers();
+
+    /**
+    * Creates a series of H.map.Marker points from the route and adds them to the map.
+    * @param {Object} route A route as received from the H.service.RoutingService
+    */
+    function addWaypointsToPanel(route) {
+    var nodeH3 = document.createElement('h3'),
+        labels = [];
+
+    route.sections.forEach((section) => {
+        labels.push(
+        section.turnByTurnActions[0].nextRoad.name[0].value)
+        labels.push(
+        section.turnByTurnActions[section.turnByTurnActions.length - 1].currentRoad.name[0].value)
+    });
+
+    nodeH3.textContent = labels.join(' - ');
+    routeInstructionsContainer.innerHTML = '';
+    routeInstructionsContainer.appendChild(nodeH3);
+    }
+
+    /**
+    * Creates a series of H.map.Marker points from the route and adds them to the map.
+    * @param {Object} route A route as received from the H.service.RoutingService
+    */
+    function addSummaryToPanel(route) {
+    let duration = 0,
+        distance = 0;
+
+    route.sections.forEach((section) => {
+        distance += section.travelSummary.length;
+        duration += section.travelSummary.duration;
+    });
+
+    var summaryDiv = document.createElement('div'),
+        content = '<b>Total distance</b>: ' + distance + 'm. <br />' +
+        '<b>Travel Time</b>: ' + toMMSS(duration) + ' (in current traffic)';
+
+    summaryDiv.style.fontSize = 'small';
+    summaryDiv.style.marginLeft = '5%';
+    summaryDiv.style.marginRight = '5%';
+    summaryDiv.innerHTML = content;
+    routeInstructionsContainer.appendChild(summaryDiv);
+    console.log(routeInstructionsContainer);
+    }
 
     // Initialize a map:
     var map = new H.Map(
         document.getElementById('mapContainer'),
         maptypes.raster.terrain.map,
         {
-        zoom: 10,
+        zoom: 1,
         center: { lat: routingParameters.origin.split(",")[0], lng: routingParameters.destination.split(",")[1] }  
     });
         
@@ -59,11 +104,15 @@
 
                 // Add the route polyline and the two markers to the map:
                 map.addObjects([routeLine]);
-
+                
                 // Set the map's viewport to make the whole route visible:
                 map.getViewModel().setLookAtData({bounds: routeLine.getBoundingBox()});
             });
+            
         }
+        
+        addWaypointsToPanel(result.routes[0]);
+        addSummaryToPanel(result.routes[0]);
     };
 
 	// Instantiate the default behavior, providing the mapEvents object:
@@ -182,5 +231,6 @@
 	console.log(bubbles)
 
 </script>
+<div id="panel"></div>
 </body>
 </html>

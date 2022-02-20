@@ -10,12 +10,14 @@ import numpy as np
 from sodapy import Socrata
 import json
 
-from scipy.spatial.distance import cdist
+from scipy.spatial.distance import cdist, pdist, euclidean
 from shapely.geometry import Point
 import geopy.distance
 from sklearn.cluster import KMeans
 from sklearn.cluster import DBSCAN
 from . import HERERouting_API
+
+import itertools
 
 def connectToBusAPI():
     # No authentication needed
@@ -106,6 +108,24 @@ def calculateStops(pointsList):
     print(stops)
     return stops
 
+def farthestStops(stopPoints):
+    Npoints = 2 # or 4 or 5...
+    print(stopPoints)
+    # making up some data:
+    data = [[sp[1].x,sp[1].y] for sp in stopPoints]
+    # finding row indices of all combinations:
+    c = [list(x) for x in itertools.combinations(range(len(data)), Npoints )]
+
+    distances = []
+    for i in c:    
+        print(i)
+        distances.append(euclidean(data[i[0]], data[i[1]])) # pdist: a method of computing all pairwise Euclidean distances in a condensed way.
+
+    ind = distances.index(max(distances)) # finding the index of the max mean distance
+    rows = c[ind] # these are the points in question
+    print(rows)
+    return rows
+
 # Two points in hamptons, two points in sandstone
 departures = [Point(51.150250, -114.156370), Point(51.145810, -114.152068), Point(51.142220, -114.109543), Point(51.141654, -114.108165)]
 # Central library, city hall
@@ -118,4 +138,13 @@ def example():
 def findStops(points):
     for point in points:
         print(f'{point.x},{point.y}')
-    return HERERouting_API.findSequence(calculateStops(points))
+    stops = calculateStops(points)
+    print(stops)
+    far = farthestStops(stops)
+    newStops = [stops[far[0]]]
+    for k in range(len(stops)):
+        if k != far[1]:
+            newStops.append(stops[k])
+    newStops.append(stops[far[1]])
+    print(newStops)
+    return HERERouting_API.findSequence(newStops)

@@ -1,5 +1,5 @@
 import requests
-
+from . import BusStops_API
 
 api_key = 'JdR1F4vpXx_HoCgrfwrmkPQxdz9nBBVjZ9W8ypWuViA' # Acquire from developer.here.com
 
