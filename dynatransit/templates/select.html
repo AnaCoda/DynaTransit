@@ -119,6 +119,54 @@
 </div>
 </div>
 <div class = "right-panel">
+    <div style="width: 100%; height: 100%" id="mapContainer"></div>
 </div>
 <a href = "{{ url_for('logout') }}" style= "height:7vh;width:10%;display:flex;align-items:center;justify-content:center;" class = "top-right btn btn-primary homepage-button btn-lg">Logout</a>
+<script>
+    // Initialize the platform object:
+    var platform = new H.service.Platform({
+    'apikey': 'JdR1F4vpXx_HoCgrfwrmkPQxdz9nBBVjZ9W8ypWuViA'
+    });
+    
+    const lat1 = {{ lat1 }};
+    const long1 = {{ long1 }};
+
+    // Obtain the default map types from the platform object
+    var maptypes = platform.createDefaultLayers();
+    
+    // Initialize a map:
+    var map = new H.Map(
+    document.getElementById('mapContainer'),
+    maptypes.raster.terrain.map,
+    {
+        zoom: 10,
+        center: { lat: lat1, lng: long1 }  
+    });
+    
+    // Enable the event system on the map instance:
+    var mapEvents = new H.mapevents.MapEvents(map);
+    
+    // Add event listener:
+    map.addEventListener('tap', function(evt) {
+    // Log 'tap' and 'mouse' events:
+    console.log(evt.type, evt.currentPointer.type); 
+    });
+    
+    // Instantiate the default behavior, providing the mapEvents object:
+    var behavior = new H.mapevents.Behavior(mapEvents);
+    
+    //window.addEventListener('resize',()=> get.ViewProt().resize())
+    //change the color of the marker to be red
+    var marker1 = new H.map.Marker({ lat: lat1, lng: long1});
+    
+    // Add the marker to the map:
+    map.addObject(marker1);
+
+    // Create the default UI:
+    var ui = H.ui.UI.createDefault(map, maptypes);
+    
+    
+    // Add info bubble to the UI:
+    ui.addBubble(bubble);
+</script>
 {% endblock content %}

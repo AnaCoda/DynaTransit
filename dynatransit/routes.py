@@ -22,6 +22,8 @@ def LoginRequired(f):
 @app.route("/")
 @app.route("/home")
 def home():
+    if "loggedIn" in session:
+        return redirect(url_for('mapview'))
     return render_template('home.html')
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -90,4 +92,4 @@ def mapview():
         db.session.commit()
         #return str(lat1) + " " + str(long1) + " " + str(lat2) + " " + str(long2)
         return render_template('map.html',lat1=lat1,long1=long1,lat2=lat2,long2=long2)
-    return render_template('select.html',form=form)
+    return render_template('select.html',form=form,lat1=51.0447,long1=114.0719)
