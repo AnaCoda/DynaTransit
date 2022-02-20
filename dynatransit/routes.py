@@ -75,9 +75,7 @@ def mapview():
         #time ranges:
         arrivalTimeRangeStart = form.arrivalTimeFrom.data
         arrivalTimeRangeEnd = form.arrivalTimeTo.data
-        
-        departureTimeRangeStart = form.startTimeFrom.data
-        departureTimeRangeEnd = form.startTimeTo.data
+        departureTime = form.departureTime.data
                 
         departureDate = form.date.data
         
@@ -86,10 +84,10 @@ def mapview():
         lat2=destinationLocation.latitude
         long2=destinationLocation.longitude
         newTrip = Trip(arrivalLocation=currentAddress, arrivalLong=long1, arrivalLat=lat1, departureLocation=destinationAddress, departureLong=long2, departureLat=lat2, 
-                       arrivalTimeRangeStart=str(arrivalTimeRangeStart), arrivalTimeRangeEnd=str(arrivalTimeRangeEnd), 
-                       departureTimeRangeStart=str(departureTimeRangeStart), departureTimeRangeEnd=str(departureTimeRangeEnd), departureDate=departureDate, userID=0)
+                       arrivalTimeRangeStart=str(arrivalTimeRangeStart), arrivalTime=str(arrivalTimeRangeEnd), 
+                       departureTime=str(departureTime), departureDate=departureDate, userID=0)
         db.session.add(newTrip)
         db.session.commit()
         #return str(lat1) + " " + str(long1) + " " + str(lat2) + " " + str(long2)
-        return render_template('map.html',lat1=lat1,long1=long1,lat2=lat2,long2=long2)
-    return render_template('select.html',form=form,lat1=51.0447,long1=114.0719)
+        return render_template('map.html',lat1=lat1,long1=long1,lat2=lat2,long2=long2,username=session["username"])
+    return render_template('select.html',form=form,lat1=51.0447,long1=114.0719,username=session["username"])

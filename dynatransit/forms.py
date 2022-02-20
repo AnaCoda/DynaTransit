@@ -28,8 +28,7 @@ class FindTrip(FlaskForm):
     startTimeFrom = TimeField('Departure Time From:')
     startTimeTo = TimeField('Departure Time To:')
    
-    arrivalTimeFrom = TimeField('Arrival Time From:')
-    arrivalTimeTo = TimeField('Arrival Time To:')
+    arrivalTime = TimeField('Arrival Time:')
    
     date  = DateField('Date',format='%Y-%m-%d')
     

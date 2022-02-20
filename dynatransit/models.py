@@ -29,8 +29,7 @@ class Trip(db.Model):
     arrivalTimeRangeStart = db.Column(db.String(30), nullable=False)
     arrivalTimeRangeEnd = db.Column(db.String(30), nullable=False)
     
-    departureTimeRangeStart = db.Column(db.String(30), nullable=False)
-    departureTimeRangeEnd = db.Column(db.String(30), nullable=False)
+    departureTime = db.Column(db.String(30), nullable=False)
     
     departureDate = db.Column(db.String(200), nullable=False) 
     

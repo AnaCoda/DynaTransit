@@ -46,9 +46,13 @@
   text-align: center;
   letter-spacing: -2px;
 }
-.custom-alert
+.username
 {
-  height: 50%;
+  font-size: 1.5em;
+  font-weight: 400;
+  text-align: center;
+  letter-spacing: -2px;
+  margin-top: 10px;
 }
 .bottom-alert
 {
@@ -108,4 +112,11 @@
 
 .form-group input {
   border: rgb(19, 212, 120) solid 3px;
+}
+
+#mapContainer
+{
+  min-height: 500px;
+  width: 100%;
+  height:auto;
 }
