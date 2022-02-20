@@ -37,6 +37,7 @@
   left: -13vh;
   width: 60%;
   height: 60%;
+  z-index: -1;
 }
 .title
 {
@@ -47,7 +48,14 @@
 }
 .custom-alert
 {
-  height: 10% !important;
+  height: 50%;
+}
+.bottom-alert
+{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50%;
 }
 .image-fullheight
 {
@@ -60,6 +68,13 @@
   font-weight: 400;
   text-align: center;
   letter-spacing:-1px;
+}
+.top-right
+{
+  position: absolute;
+  top: 0;
+  right: 20px;
+  text-align: center;
 }
 .homepage-button
 {

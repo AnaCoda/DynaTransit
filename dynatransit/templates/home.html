@@ -21,7 +21,15 @@
     <div class = "right-panel">
       <img class = "image-fullheight right-side" src = "{{ url_for('static', filename='../static/img/bushand.jpg') }}">
     </div>
-
 </div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class = "bottom-alert alert-{{ category }}">
+            {{ message }}   
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 
 {% endblock content %}

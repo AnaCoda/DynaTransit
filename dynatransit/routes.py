@@ -8,6 +8,17 @@ from dynatransit.forms import RegistrationForm, LoginForm, FindTrip
 
 geolocator = Nominatim(user_agent="app")
 
+def LoginRequired(f):
+    #this would be the function that is being decorated 
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if "loggedIn" in session:
+            return f(*args, **kwargs)
+        else:
+            flash("You need to login first", "danger")
+            return redirect(url_for("login"))
+    return wrap
+
 @app.route("/")
 @app.route("/home")
 def home():
@@ -28,6 +39,11 @@ def register():
         return redirect(url_for('mapview'))
     return render_template('register.html', form=form)
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return render_template('home.html')
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -44,6 +60,7 @@ def login():
     return render_template('login.html',form=form)
 
 @app.route("/mapview", methods=['GET', 'POST'])
+@LoginRequired
 def mapview():
     form = FindTrip()
     if form.validate_on_submit():   
