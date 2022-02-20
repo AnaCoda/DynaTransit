@@ -1,7 +1,7 @@
 #pip install flask
 #pip install geopy
-#pip install SQLAlchemy
-#pip install Bcrypt
+#pip install flask_sqlalchemy
+#pip install flask_bcrypt
 #pip install flask_login
 #pip install functools  
 from flask import Flask, render_template, request, redirect, url_for

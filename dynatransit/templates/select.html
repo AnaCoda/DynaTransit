@@ -1,10 +1,115 @@
 {% extends "base.html" %}
 {% block content %}
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for category, message in messages %}
+        <div class = "alert alert-{{ category }}">
+        {{ message }}   
+        </div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
 <!-- get the input from the user form and send it to the map url -->
-<form method="POST">
-    <input class = "" type = "text" name = "current-address"> 
-    <input class = "" type = "text" name = "destination-address"> 
-    <input class = "next-date" type = "submit">
-</form>
+<div class="centered-middle">
+    <h1>Trip Planner</h1>
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+            <fieldset class = "form-group">
+                <div class = "form-group">
+                    {{ form.start.label(class="form-control-label") }}
+                    {% if form.start.errors %}
+                        {{ form.start(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.start.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.start(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class = "form-group">
+                    {{ form.end.label(class="form-control-label") }}
+                    {% if form.end.errors %}
+                        {{ form.end(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.end.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.end(class="form-control form-control-lg") }}
+                    {% endif %}                    
+                </div>
+                <div class = "form-group">
+                    {{ form.startTimeFrom.label(class="form-control-label") }}
+                    {% if form.startTimeFrom.errors %}
+                        {{ form.startTimeFrom(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.startTimeFrom.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.startTimeFrom(class="form-control form-control-lg") }}
+                    {% endif %}                    
+                </div>
+                <div class = "form-group">
+                    {{ form.startTimeTo.label(class="form-control-label") }}
+                    {% if form.startTimeTo.errors %}
+                        {{ form.startTimeTo(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.startTimeTo.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.startTimeTo(class="form-control form-control-lg") }}
+                    {% endif %}                    
+                </div>
+                <div class = "form-group">
+                    {{ form.arrivalTimeFrom.label(class="form-control-label") }}
+                    {% if form.arrivalTimeFrom.errors %}
+                        {{ form.arrivalTimeFrom(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.arrivalTimeFrom.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.arrivalTimeFrom(class="form-control form-control-lg") }}
+                    {% endif %}                    
+                </div>
+                <div class = "form-group">
+                    {{ form.arrivalTimeTo.label(class="form-control-label") }}
+                    {% if form.arrivalTimeTo.errors %}
+                        {{ form.arrivalTimeTo(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.arrivalTimeTo.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.arrivalTimeTo(class="form-control form-control-lg") }}
+                    {% endif %}                    
+                </div>
+                <div class = "form-group">
+                    {{ form.date.label(class="form-control-label") }}
+                    {% if form.date.errors %}
+                        {{ form.date(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.date.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.date(class="form-control form-control-lg") }}
+                    {% endif %}                    
+                </div>   
+            </fieldset>
+        <div class = "form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+</div>
 {% endblock content %}
