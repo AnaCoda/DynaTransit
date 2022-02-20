@@ -131,7 +131,7 @@ def routeview():
     for coord in results:
         realPoints.append(Point(coord[1], coord[0]))
         realPoints.append(Point(coord[3], coord[2]))
-    
     destinations = BusStops_API.findStops(realPoints)
     print(destinations)
     return render_template('route.html',destinationList = json.dumps(destinations),form=form,username=session["username"])
+ 

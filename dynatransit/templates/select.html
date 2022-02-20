@@ -47,7 +47,7 @@
             <fieldset class = "form-group" style="
             height: 80vh;">
                 <div class = "form-group">
-                    {{ form.start.label(class="form-control-label") }}
+                    {{ form.start.label(class="form-control-label",autocomplete="off") }}
                     {% if form.start.errors %}
                         {{ form.start(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
@@ -60,7 +60,7 @@
                     {% endif %}
                 </div>
                 <div class = "form-group">
-                    {{ form.end.label(class="form-control-label") }}
+                    {{ form.end.label(class="form-control-label",autocomplete="off") }}
                     {% if form.end.errors %}
                         {{ form.end(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
@@ -125,7 +125,7 @@
 <script>
     // Initialize the platform object:
     var platform = new H.service.Platform({
-    'apikey': 'JdR1F4vpXx_HoCgrfwrmkPQxdz9nBBVjZ9W8ypWuViA'
+    'apikey': 'NCHL6vl8qPOQVg5J0hvR4NTQr5O-brHpfqPUoyr5_AA'
     });
     
     const lat1 = {{ lat1 }};

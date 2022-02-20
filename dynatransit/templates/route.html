@@ -41,10 +41,8 @@
     <h1>Trip Planner</h1>
         <form action="" method="POST">
             {{ form.hidden_tag() }}
-            <fieldset class = "form-group" style="
-            height: 80vh;">
                 <div class = "form-group">
-                    {{ form.start.label(class="form-control-label") }}
+                    {{ form.start.label(class="form-control-label",autocomplete="off") }}
                     {% if form.start.errors %}
                         {{ form.start(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
@@ -57,7 +55,7 @@
                     {% endif %}
                 </div>
                 <div class = "form-group">
-                    {{ form.end.label(class="form-control-label") }}
+                    {{ form.end.label(class="form-control-label",autocomplete="off") }}
                     {% if form.end.errors %}
                         {{ form.end(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
@@ -117,13 +115,14 @@
 <div class = "right-panel">
     <div id="mapContainer"></div>
     <div id="panel"></div>
+
 </div>
 <a href = "{{ url_for('logout') }}" style= "height:7vh;width:100px;display:flex;align-items:center;justify-content:center;" class = "top-right btn btn-primary homepage-button btn-lg">Logout</a>
 <a href = "{{ url_for('routeview') }}" style= "margin-top:80vh;height:7vh;width:200px;display:flex;align-items:center;justify-content:center;" class = "btn btn-primary homepage-button btn-lg">View Current Route</a>
 <script>	
     // Initialize the platform object:
     var platform = new H.service.Platform({
-    'apikey': 'JdR1F4vpXx_HoCgrfwrmkPQxdz9nBBVjZ9W8ypWuViA'
+    'apikey': 'NCHL6vl8qPOQVg5J0hvR4NTQr5O-brHpfqPUoyr5_AA'
     });
 
     this.router = this.platform.getRoutingService();

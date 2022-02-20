@@ -103,9 +103,11 @@ def closestStopsToCentroids(clusters):
 
 def calculateStops(pointsList):
     LocationsNP = np.array(pointsListToDF(pointsList))
-    clusters = clusterLocations(pointsList)
-    stops = closestStopsToCentroids(clusters)
-    print(stops)
+    stops = None
+    if len(pointsList) > 0:
+        clusters = clusterLocations(pointsList)
+        stops = closestStopsToCentroids(clusters)
+        print(stops)
     return stops
 
 def farthestStops(stopPoints):
