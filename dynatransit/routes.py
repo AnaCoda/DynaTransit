@@ -4,6 +4,9 @@ from dynatransit import db, loginManager, app
 from dynatransit.models import User, Trip
 from geopy.geocoders import Nominatim
 from functools import wraps
+import json
+
+from .utils import BusStops_API
 
 geolocator = Nominatim(user_agent="app")
 
@@ -36,3 +39,9 @@ def mapview():
         #return str(lat1) + " " + str(long1) + " " + str(lat2) + " " + str(long2)
         return render_template('map.html',lat1=lat1,long1=long1,lat2=lat2,long2=long2)
     return render_template('select.html')
+
+@app.route("/routeview", methods=['GET', 'POST'])
+def routeview():
+    destinations = BusStops_API.example()
+    print(destinations)
+    return render_template('route.html',destinationList = json.dumps(destinations))
