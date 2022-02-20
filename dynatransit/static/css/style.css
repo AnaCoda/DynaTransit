@@ -11,7 +11,9 @@
     grid-template-columns: 50vw 50vw;
     margin: 3px;
 }
-
+.head-icon{
+  fill: rgb(19, 212, 120);
+}
 .centered-middle
 {
   /* set the vertical alignment to middle and the horizontal alignment to the middle */
@@ -28,12 +30,24 @@
   grid-gap: 10px;
   margin: 10px;
 }
+.top-left-corner-item
+{
+  position: absolute;
+  top: 0;
+  left: -13vh;
+  width: 60%;
+  height: 60%;
+}
 .title
 {
   font-size: 4em;
   font-weight: 400;
   text-align: center;
   letter-spacing: -2px;
+}
+.custom-alert
+{
+  height: 10% !important;
 }
 .image-fullheight
 {
@@ -50,6 +64,7 @@
 .homepage-button
 {
   background-color: #13D478;
+  border: none;
   border-radius: 12px;
   height: 20%;
   width: 100%;

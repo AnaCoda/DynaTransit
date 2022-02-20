@@ -1,5 +1,5 @@
 import bcrypt
-from flask import Flask, render_template, request, redirect, url_for,session
+from flask import Flask, render_template, request, redirect, url_for,session,flash
 from dynatransit import db, loginManager, app
 from dynatransit.models import User, Trip
 from geopy.geocoders import Nominatim
@@ -13,13 +13,35 @@ geolocator = Nominatim(user_agent="app")
 def home():
     return render_template('home.html')
 
-@app.route("/register")
+@app.route("/register", methods=['GET', 'POST'])
 def register():
-    return render_template('register.html')
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.hashpw(str(form.password.data).encode('utf8'), bcrypt.gensalt())
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash(f'Account created for {form.username.data}', 'success')
+        session["loggedIn"] = True
+        session["emailID"] = form.email.data
+        session["username"] = User.query.filter_by(email=form.email.data).first().username
+        return redirect(url_for('mapview'))
+    return render_template('register.html', form=form)
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    form = LoginForm()
+    if form.validate_on_submit():   
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.checkpw(form.password.data.encode('utf-8') ,user.password):
+            session['loggedIn'] = True
+            session["emailID"] = form.email.data
+            session["username"] = User.query.filter_by(email=form.email.data).first().username
+            flash(f"You are now logged in, {user.username}", "success")
+            return redirect(url_for('mapview'))
+        else:
+            flash("Login Unsuccessful. Please check email and password", "danger")
+    return render_template('login.html',form=form)
 
 @app.route("/mapview", methods=['GET', 'POST'])
 def mapview():
