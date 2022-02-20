@@ -86,6 +86,8 @@
             alert(error.message);
     });
      
+	// Create the default UI:
+	var ui = H.ui.UI.createDefault(map, maptypes);
     var markers = new Array;
     for (var destination in routingParameters)
     {
@@ -93,17 +95,24 @@
         if(routingParameters[destination].includes(","))
         {
             var marker = new H.map.Marker({ lat: routingParameters[destination].split(",")[0], lng: routingParameters[destination].split(",")[1]});
+            marker.setData(destination);
             console.log(marker);
             markers.push(marker);
-            map.addObject(marker)
+            map.addObject(marker);
+            // add 'tap' event listener, that opens info bubble, to the group
+            marker.addEventListener('tap', function (evt) {
+                // event target is the marker itself, group is a parent event target
+                // for all objects that it contains
+                var bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
+                // read custom data
+                content: evt.target.getData()
+                });
+                // show info bubble
+                ui.addBubble(bubble);
+            }, false);
         }
     }
 	
-	// Create the default UI:
-	var ui = H.ui.UI.createDefault(map, maptypes);
-
-// Add info bubble to the UI:
-ui.addBubble(bubble);
 
 </script>
 </body>
