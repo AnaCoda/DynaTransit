@@ -20,7 +20,9 @@
     <h1>Trip Planner</h1>
         <form action="" method="POST">
             {{ form.hidden_tag() }}
-            <fieldset class = "form-group">
+            <fieldset class = "form-group" style="
+            height: 80vh;
+            overflow-y: scroll;">
                 <div class = "form-group">
                     {{ form.start.label(class="form-control-label") }}
                     {% if form.start.errors %}
