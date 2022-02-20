@@ -98,6 +98,7 @@ def mapview():
 
 
 @app.route("/routeview", methods=['GET', 'POST'])
+@LoginRequired
 def routeview():
     form = FindTrip()
     if form.validate_on_submit():   
