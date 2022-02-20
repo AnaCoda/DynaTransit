@@ -33,13 +33,8 @@ def findSequence(pointsList):
     app_data['end'] = loc_to_waypoint(locationList[-1])
     app_data['mode'] = 'car;fastest'
 
-    print(app_data)
-
     s = requests.Session()
     req = requests.Request('GET', url=sequence_url, params=app_data).prepare()
-
-    # This URL can be copy/pasted into a browser and returns an optimized sequence
-    print (req.url)
 
     # this call blocks
     r = s.send(req)
@@ -47,7 +42,22 @@ def findSequence(pointsList):
     # this call also blocks
     # r = requests.get(self.sequence_url, app_data)
 
-    print (r.json())
+    waypoints = r.json()['results'][0]['waypoints']
+    wayArr = {'routingMode': 'fast',
+    'transportMode': 'car',
+    'return': 'polyline'}
+    for p in waypoints:
+        wayArr[p['id']] = f"{p['lat']},{p['lng']}"
+    wayArr["origin"] = wayArr.pop("start")
+    wayArr["destination"] = wayArr.pop("end")
+    viaList = []
+    for key in wayArr:
+        if key not in ['origin', 'destination', 'routingMode', 'transportMode', 'return']:
+            viaList.append(wayArr[key])
+    wayArr["via"] = viaList
+
+    return wayArr
+
 
 # sending get request and saving the response as response object 
 '''r = requests.get(url = URL, params = PARAMS) 

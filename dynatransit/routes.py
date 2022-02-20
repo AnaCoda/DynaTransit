@@ -4,6 +4,9 @@ from dynatransit import db, loginManager, app
 from dynatransit.models import User, Trip
 from geopy.geocoders import Nominatim
 from functools import wraps
+import json
+
+from .utils import BusStops_API
 from dynatransit.forms import RegistrationForm, LoginForm, FindTrip
 
 geolocator = Nominatim(user_agent="app")
