@@ -37,11 +37,6 @@
         // Enable the event system on the map instance:
         var mapEvents = new H.mapevents.MapEvents(map);
         
-        // Add event listener:
-        map.addEventListener('tap', function(evt) {
-        // Log 'tap' and 'mouse' events:
-        console.log(evt.type, evt.currentPointer.type); 
-    });
 
     // Define a callback function to process the routing response:
     var onResult = function(result) {
@@ -85,33 +80,68 @@
         function(error) {
             alert(error.message);
     });
-     
+    
 	// Create the default UI:
 	var ui = H.ui.UI.createDefault(map, maptypes);
     var markers = new Array;
+    var bubbles = new Array;
+    var groups = new Array;
+    var i = 0;
     for (var destination in routingParameters)
     {
-        
-        if(routingParameters[destination].includes(","))
+        groups[i] = new H.map.Group();
+        map.addObject(groups[i]);
+        console.log(routingParameters[destination])
+        if(typeof(routingParameters[destination]) == 'string' && routingParameters[destination].indexOf(",") > -1)
         {
-            var marker = new H.map.Marker({ lat: routingParameters[destination].split(",")[0], lng: routingParameters[destination].split(",")[1]});
-            marker.setData(destination);
-            console.log(marker);
-            markers.push(marker);
-            map.addObject(marker);
+            markers[i] = new H.map.Marker({ lat: routingParameters[destination].split(",")[0], lng: routingParameters[destination].split(",")[1]});
+            markers[i].setData(destination);
+            
             // add 'tap' event listener, that opens info bubble, to the group
-            marker.addEventListener('tap', function (evt) {
+            groups[i].addEventListener('tap', function (evt) {
+                console.log(markers[i]);
                 // event target is the marker itself, group is a parent event target
                 // for all objects that it contains
-                var bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
+                bubbles[i] = new H.ui.InfoBubble(evt.target.getGeometry(), {
                 // read custom data
-                content: evt.target.getData()
+                content: 'hello'
                 });
                 // show info bubble
-                ui.addBubble(bubble);
+                ui.addBubble(bubbles[i]);
             }, false);
+            groups[i].addObject(markers[i]);
+            i++;
+        }
+        else if(Array.isArray(routingParameters[destination]))
+        {
+            groups[i] = new H.map.Group();
+            map.addObject(groups[i]);
+            for (var location in routingParameters[destination])
+            {
+                console.log(location);
+                markers[i] = new H.map.Marker({ lat: routingParameters[destination].split(",")[0], lng: routingParameters[destination].split(",")[1]});
+                markers[i].setData(destination);
+                
+                // add 'tap' event listener, that opens info bubble, to the group
+                groups[i].addEventListener('tap', function (evt) {
+                    console.log(markers[i]);
+                    // event target is the marker itself, group is a parent event target
+                    // for all objects that it contains
+                    bubbles[i] = new H.ui.InfoBubble(evt.target.getGeometry(), {
+                    // read custom data
+                    content: evt.target.getData()
+                    });
+                    // show info bubble
+                    ui.addBubble(bubbles[i]);
+                }, false);
+                groups[i].addObject(markers[i]);
+                i++;
+            }
         }
     }
+
+    console.log(markers)
+    console.log(map)
 	
 
 </script>
