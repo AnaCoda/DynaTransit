@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for,session
 from dynatransit import db, loginManager, app
 from dynatransit.models import User, Trip
 from geopy.geocoders import Nominatim
+from shapely.geometry import Point
 from functools import wraps
 import json
 
@@ -58,6 +59,13 @@ def mapview():
 
 @app.route("/routeview", methods=['GET', 'POST'])
 def routeview():
-    destinations = BusStops_API.example()
+    results = Trip.query.with_entities(Trip.arrivalLong, Trip.arrivalLat, Trip.departureLong, Trip.departureLat).all()
+        
+    realPoints = []
+    for coord in results:
+        realPoints.append(Point(coord[1], coord[0]))
+        realPoints.append(Point(coord[3], coord[2]))
+    
+    destinations = BusStops_API.findStops(realPoints)
     print(destinations)
     return render_template('route.html',destinationList = json.dumps(destinations))

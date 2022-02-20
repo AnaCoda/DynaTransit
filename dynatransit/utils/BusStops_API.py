@@ -74,9 +74,10 @@ def get_centroid(cluster):
 
 # Given locations, cluster them if they are within a certain distance of each other (unsupervised, without number of clusters)
 def clusterLocations(locationPointsList):
-    LocationsNP = np.array(pointsListToDF(allPoints))
+    LocationsNP = np.array(pointsListToDF(locationPointsList))
     clustered = DBSCAN(eps=0.025,metric='haversine', min_samples=1).fit(LocationsNP)
     cluster_labels = clustered.labels_
+    print(cluster_labels)
     # get the number of clusters
     num_clusters = len(set(clustered.labels_))
     # turn the clusters into a pandas series,where each element is a cluster of points
@@ -87,21 +88,23 @@ def clusterLocations(locationPointsList):
 def closestStopsToCentroids(clusters):
     # Get the centroids
     centroids = clusters.map(get_centroid)
+    print(centroids)
     stops = getActiveStopPoints()
     closeStops = pd.DataFrame()
     for location in centroids:
         locPoint = Point(location)
+        print(locPoint)
+        print(closestStop(locPoint, stops))
         closeStops = closeStops.append(closestStop(locPoint, stops))
     stopCoords = list(zip(closeStops.stop_name, closeStops.point))
     return stopCoords
 
 def calculateStops(pointsList):
     LocationsNP = np.array(pointsListToDF(pointsList))
-    clusters = clusterLocations(LocationsNP)
+    clusters = clusterLocations(pointsList)
     stops = closestStopsToCentroids(clusters)
     print(stops)
     return stops
-
 
 # Two points in hamptons, two points in sandstone
 departures = [Point(51.150250, -114.156370), Point(51.145810, -114.152068), Point(51.142220, -114.109543), Point(51.141654, -114.108165)]
@@ -111,3 +114,8 @@ allPoints = departures + arrivals
 # Simply an example
 def example():
     return HERERouting_API.findSequence(calculateStops(allPoints))
+
+def findStops(points):
+    for point in points:
+        print(f'{point.x},{point.y}')
+    return HERERouting_API.findSequence(calculateStops(points))
