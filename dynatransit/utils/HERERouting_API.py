@@ -48,6 +48,8 @@ def findSequence(pointsList):
     'return': 'polyline'}
     for p in waypoints:
         wayArr[p['id']] = f"{p['lat']},{p['lng']}"
+    wayArr["origin"] = wayArr.pop("start")
+    wayArr["destination"] = wayArr.pop("end")
     return wayArr
 
 
