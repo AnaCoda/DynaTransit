@@ -3,7 +3,11 @@ from flask import Flask, render_template, request, redirect, url_for,session,fla
 from dynatransit import db, loginManager, app
 from dynatransit.models import User, Trip
 from geopy.geocoders import Nominatim
+from shapely.geometry import Point
 from functools import wraps
+import json
+
+from .utils import BusStops_API
 from dynatransit.forms import RegistrationForm, LoginForm, FindTrip
 
 geolocator = Nominatim(user_agent="app")
@@ -91,3 +95,17 @@ def mapview():
         #return str(lat1) + " " + str(long1) + " " + str(lat2) + " " + str(long2)
         return render_template('map.html',lat1=lat1,long1=long1,lat2=lat2,long2=long2,username=session["username"])
     return render_template('select.html',form=form,lat1=51.0447,long1=-114.0719,username=session["username"])
+
+
+@app.route("/routeview", methods=['GET', 'POST'])
+def routeview():
+    results = Trip.query.with_entities(Trip.arrivalLong, Trip.arrivalLat, Trip.departureLong, Trip.departureLat).all()
+        
+    realPoints = []
+    for coord in results:
+        realPoints.append(Point(coord[1], coord[0]))
+        realPoints.append(Point(coord[3], coord[2]))
+    
+    destinations = BusStops_API.findStops(realPoints)
+    print(destinations)
+    return render_template('route.html',destinationList = json.dumps(destinations))

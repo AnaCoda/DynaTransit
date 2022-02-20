@@ -1,0 +1,254 @@
+<html>  
+<head>
+<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"type="text/javascript" charset="utf-8"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"type="text/javascript" charset="utf-8"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css"href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+</head>
+  
+<body style='margin: 0'>
+<div style="width: 100%; height: 70%" id="mapContainer"></div>
+
+<script>	
+    // Initialize the platform object:
+    var platform = new H.service.Platform({
+    'apikey': 'JdR1F4vpXx_HoCgrfwrmkPQxdz9nBBVjZ9W8ypWuViA'
+    });
+
+    this.router = this.platform.getRoutingService();
+    this.geocoder = this.platform.getGeocodingService();
+    var routingParameters = {{destinationList|safe}};
+    routingParameters.via =  new H.service.Url.MultiValueQueryParameter(routingParameters.via);
+
+    
+
+    // Obtain the default map types from the platform object
+    var maptypes = platform.createDefaultLayers();
+
+    /**
+    * Creates a series of H.map.Marker points from the route and adds them to the map.
+    * @param {Object} route A route as received from the H.service.RoutingService
+    */
+    function addWaypointsToPanel(route) {
+    console.log("adding waypoints");
+    var nodeH3 = document.createElement('h3'),
+        labels = [];
+    
+    console.log(route);
+    route.sections.forEach((section) => {
+        labels.push(
+        section.turnByTurnActions[0].nextRoad.name[0].value)
+        labels.push(
+        section.turnByTurnActions[section.turnByTurnActions.length - 1].currentRoad.name[0].value)
+    });
+
+    nodeH3.textContent = labels.join(' - ');
+    console.log(routeInstructionsContainer)
+    routeInstructionsContainer.innerHTML = '';
+    routeInstructionsContainer.appendChild(nodeH3);
+    console.log(routeInstructionsContainer);
+    }
+    function toMMSS(duration) {
+  return Math.floor(duration / 60) + ' minutes ' + (duration % 60) + ' seconds.';
+}
+
+    /**
+    * Creates a series of H.map.Marker points from the route and adds them to the map.
+    * @param {Object} route A route as received from the H.service.RoutingService
+    */
+    function addSummaryToPanel(route) {
+    let duration = 0,
+        distance = 0;
+
+    route.sections.forEach((section) => {
+        distance += section.travelSummary.length;
+        duration += section.travelSummary.duration;
+    });
+
+    var summaryDiv = document.createElement('div'),
+        content = '<b>Total distance</b>: ' + distance + 'm. <br />' +
+        '<b>Travel Time</b>: ' + toMMSS(duration) + ' (in current traffic)';
+
+    summaryDiv.style.fontSize = 'small';
+    summaryDiv.style.marginLeft = '5%';
+    summaryDiv.style.marginRight = '5%';
+    summaryDiv.innerHTML = content;
+    routeInstructionsContainer.appendChild(summaryDiv);
+    console.log(routeInstructionsContainer);
+    }
+
+    // Initialize a map:
+    var map = new H.Map(
+        document.getElementById('mapContainer'),
+        maptypes.raster.terrain.map,
+        {
+        zoom: 1,
+        center: { lat: routingParameters.origin.split(",")[0], lng: routingParameters.destination.split(",")[1] }  
+    });
+        
+        // Enable the event system on the map instance:
+        var mapEvents = new H.mapevents.MapEvents(map);
+        
+        var routeInstructionsContainer;
+    // Define a callback function to process the routing response:
+    var onResult = function(result) {
+        // ensure that at least one route was found
+        if (result.routes.length) {
+            result.routes[0].sections.forEach((section) => {
+                // Create a linestring to use as a point source for the route line
+                let linestring = H.geo.LineString.fromFlexiblePolyline(section.polyline);
+
+                // Create a polyline to display the route:
+                let routeLine = new H.map.Polyline(linestring, {
+                style: { strokeColor: 'blue', lineWidth: 3 }
+                });
+
+                // Create a marker for the start point:
+                let startMarker = new H.map.Marker(section.departure.place.location);
+
+                // Create a marker for the end point:
+                let endMarker = new H.map.Marker(section.arrival.place.location);
+
+                // Add the route polyline and the two markers to the map:
+                map.addObjects([routeLine]);
+                
+                // Set the map's viewport to make the whole route visible:
+                map.getViewModel().setLookAtData({bounds: routeLine.getBoundingBox()});
+            });
+            
+            console.log("adding stuff");
+            routeInstructionsContainer = document.getElementById('panel');
+            addWaypointsToPanel(result.routes[0]);
+            addSummaryToPanel(result.routes[0]);
+        }
+    };
+
+	// Instantiate the default behavior, providing the mapEvents object:
+	var behavior = new H.mapevents.Behavior(mapEvents);
+
+
+    // Get an instance of the routing service version 8:
+    var router = platform.getRoutingService(null, 8);
+
+    // Call calculateRoute() with the routing parameters,
+    // the callback and an error callback function (called if a
+    // communication error occurs):
+    router.calculateRoute(routingParameters, onResult,
+        function(error) {
+            alert(error.message);
+    });
+    
+	// Create the default UI:
+	var ui = H.ui.UI.createDefault(map, maptypes);
+    var markers = new Array;
+    var bubbles = new Array;
+    var groups = new Array;
+    var i = 0;
+
+    // Get an instance of the search service:
+    var service = platform.getSearchService();
+    var labels = new Array;
+    var nodeH3 = document.createElement('h3');
+    for (var destination in routingParameters)
+    {
+        console.log(i);
+        console.log(destination);
+        if(typeof(routingParameters[destination]) == 'string' && routingParameters[destination].indexOf(",") > -1 && /\d/.test(routingParameters[destination]))
+        {
+            groups[i] = new H.map.Group();
+        map.addObject(groups[i]);
+        console.log(destination);
+        console.log(routingParameters[destination])
+            markers[i] = new H.map.Marker({ lat: routingParameters[destination].split(",")[0], lng: routingParameters[destination].split(",")[1]});
+            service.reverseGeocode({
+            at: routingParameters[destination]
+            }, (result) => {
+                var nodeH3 = document.createElement('h3'),
+                labels = [];
+
+                
+            console.log(markers);
+            result.items.forEach((item) => {
+                // Assumption: ui is instantiated
+                // Create an InfoBubble at the returned location with
+                // the address as its contents:
+                console.log(item)
+                console.log(markers[i])
+                labels.push(item.address.label)
+            });
+            }, alert);
+            
+            // add 'tap' event listener, that opens info bubble, to the group
+            groups[i].addEventListener('tap', function (evt) {
+                console.log('tapped');
+                console.log(evt.target.getData())
+                // event target is the marker itself, group is a parent event target
+                // for all objects that it contains
+                var bubble = (new H.ui.InfoBubble(evt.target.getGeometry(), {
+                // read custom data
+                content: evt.target.getData()
+                }));
+                // show info bubble
+                ui.addBubble(bubble);
+            }, false);
+            groups[i].addObject(markers[i]);
+            i++;
+        }
+        else if(Array.isArray(routingParameters[destination]))
+        {
+            console.log(i)
+            groups[i] = new H.map.Group();
+            map.addObject(groups[i]);
+            for (var location in routingParameters[destination])
+            {
+                console.log(location);
+                markers[i] = new H.map.Marker({ lat: routingParameters[destination].split(",")[0], lng: routingParameters[destination].split(",")[1]});
+                // Assumption: ui is instantiated
+                // Create an InfoBubble at the returned location with
+                // the address as its contents:
+                console.log(item)
+                service.reverseGeocode({
+                    at: routingParameters[destination]
+                    }, (result) => {
+
+                    result.items.forEach((item) => {
+                        // Assumption: ui is instantiated
+                        // Create an InfoBubble at the returned location with
+                        // the address as its contents:
+                        labels.push(item.address.label)
+                        console.log(item)
+                    });
+                }, alert);
+                
+                // add 'tap' event listener, that opens info bubble, to the group
+                groups[i].addEventListener('tap', function (evt) {
+                    // event target is the marker itself, group is a parent event target
+                    // for all objects that it contains
+                    var bubble = (new H.ui.InfoBubble(evt.target.getGeometry(), {
+                    // read custom data
+                    content: evt.target.getData()
+                    }));
+                    // show info bubble
+                    ui.addBubble(bubble);
+                }, false);
+                groups[i].addObject(markers[i]);
+                i++;
+            }
+        }
+    }
+    console.log(labels)
+    nodeH3.textContent = labels.join(' - ');
+                routeInstructionsContainer.innerHTML = '';
+                routeInstructionsContainer.appendChild(nodeH3);
+    console.log(markers)
+    console.log(map)
+    console.log(groups)
+	console.log(bubbles)
+    
+
+</script>
+<div id="panel"></div>
+</body>
+</html>
