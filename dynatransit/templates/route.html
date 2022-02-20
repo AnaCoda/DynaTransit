@@ -20,6 +20,7 @@
     this.router = this.platform.getRoutingService();
     this.geocoder = this.platform.getGeocodingService();
     var routingParameters = {{destinationList|safe}};
+    routingParameters.via =  new H.service.Url.MultiValueQueryParameter(routingParameters.via);
      
     // Obtain the default map types from the platform object
     var maptypes = platform.createDefaultLayers();
