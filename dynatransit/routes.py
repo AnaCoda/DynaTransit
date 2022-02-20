@@ -92,12 +92,38 @@ def mapview():
         db.session.add(newTrip)
         db.session.commit()
         #return str(lat1) + " " + str(long1) + " " + str(lat2) + " " + str(long2)
+        return redirect(url_for('routeview'))
         return render_template('map.html',lat1=lat1,long1=long1,lat2=lat2,long2=long2,username=session["username"])
     return render_template('select.html',form=form,lat1=51.0447,long1=-114.0719,username=session["username"])
 
 
 @app.route("/routeview", methods=['GET', 'POST'])
 def routeview():
+    form = FindTrip()
+    if form.validate_on_submit():   
+        currentAddress = form.start.data
+        currentLocation = geolocator.geocode(currentAddress)
+        
+        destinationAddress = form.end.data
+        destinationLocation = geolocator.geocode(destinationAddress)
+        
+        #time ranges:
+        arrivalTimeRangeStart = form.arrivalTimeFrom.data
+        arrivalTimeRangeEnd = form.arrivalTimeTo.data
+                
+        departureDate = form.date.data
+        
+        lat1=currentLocation.latitude
+        long1=currentLocation.longitude
+        lat2=destinationLocation.latitude
+        long2=destinationLocation.longitude
+        newTrip = Trip(arrivalLocation=currentAddress, arrivalLong=long1, arrivalLat=lat1, departureLocation=destinationAddress, departureLong=long2, departureLat=lat2, 
+                        arrivalTimeRangeStart=str(arrivalTimeRangeStart), arrivalTimeRangeEnd=str(arrivalTimeRangeEnd), 
+                    departureDate=departureDate, userID=0)
+        db.session.add(newTrip)
+        db.session.commit()
+        #return str(lat1) + " " + str(long1) + " " + str(lat2) + " " + str(long2)
+        return redirect(url_for('routeview'))
     results = Trip.query.with_entities(Trip.arrivalLong, Trip.arrivalLat, Trip.departureLong, Trip.departureLat).all()
         
     realPoints = []
@@ -107,4 +133,4 @@ def routeview():
     
     destinations = BusStops_API.findStops(realPoints)
     print(destinations)
-    return render_template('route.html',destinationList = json.dumps(destinations))
+    return render_template('route.html',destinationList = json.dumps(destinations),form=form,username=session["username"])

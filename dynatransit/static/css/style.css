@@ -131,3 +131,25 @@
   border: #49eb6c solid 3px;
   border-radius: 12px;
 }
+#panel
+{
+  position: absolute;
+  right: 30%;
+  bottom: 3%;
+  transform: translate(50%, 50%);
+  margin-left:30%;
+  min-width: 45vw;
+  min-height: 70vh;
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+#panel h3
+{
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 400;
+  text-align: center;
+  letter-spacing:-1px;
+}
