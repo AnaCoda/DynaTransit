@@ -46,7 +46,7 @@
             {{ form.hidden_tag() }}
             <fieldset class = "form-group" style="
             height: 80vh;
-            overflow-y: scroll;">
+            ">
                 <div class = "form-group">
                     {{ form.start.label(class="form-control-label") }}
                     {% if form.start.errors %}
@@ -132,9 +132,9 @@
 </div>
 </div>
 <div class = "right-panel">
-    <div class = "image-fullheight" id="mapContainer"></div>
+    <div id="mapContainer"></div>
 </div>
-<a href = "{{ url_for('logout') }}" style= "height:7vh;width:10%;display:flex;align-items:center;justify-content:center;" class = "top-right btn btn-primary homepage-button btn-lg">Logout</a>
+<a href = "{{ url_for('logout') }}" style= "height:7vh;width:100px;display:flex;align-items:center;justify-content:center;" class = "top-right btn btn-primary homepage-button btn-lg">Logout</a>
 <script>
     // Initialize the platform object:
     var platform = new H.service.Platform({

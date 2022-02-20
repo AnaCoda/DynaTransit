@@ -116,7 +116,15 @@
 
 #mapContainer
 {
-  min-height: 500px;
-  width: 100%;
-  height:auto;
+  position: fixed; no-repeat;
+  left: 10%;
+  top: 50%;
+  margin-left:60%;
+  min-width: 50vw;
+  min-height: 85vh;
+  width: 50vw;
+  height: 85vh;
+  transform: translate(-50%, -50%);
+  border: #49eb6c solid 3px;
+  border-radius: 12px;
 }
