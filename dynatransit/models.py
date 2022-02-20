@@ -35,3 +35,16 @@ class Trip(db.Model):
     departureDate = db.Column(db.String(200), nullable=False) 
     
     userID = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    
+class Route(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    
+    waypoint = db.Column(db.String(900), nullable=False)
+    
+    destination = db.Column(db.String(200), nullable=False)
+
+    time = db.Column(db.String(30), nullable=False)
+
+    departureDate = db.Column(db.String(200), nullable=False) 
+    
+    userID = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
