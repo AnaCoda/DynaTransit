@@ -51,7 +51,6 @@ def findSequence(pointsList):
         wayArr[p['id']] = f"{p['lat']},{p['lng']}"
     wayArr["origin"] = wayArr.pop("start")
     wayArr["destination"] = wayArr.pop("end")
-    wayArr.pop("destination1")
     viaList = []
     for key in wayArr:
         if key not in ['origin', 'destination', 'routingMode', 'transportMode', 'return']:
