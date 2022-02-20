@@ -9,7 +9,7 @@
 </head>
   
 <body style='margin: 0'>
-<div style="width: 100%; height: 100%" id="mapContainer"></div>
+<div style="width: 100%; height: 70%" id="mapContainer"></div>
 
 <script>	
     // Initialize the platform object:
@@ -21,7 +21,9 @@
     this.geocoder = this.platform.getGeocodingService();
     var routingParameters = {{destinationList|safe}};
     routingParameters.via =  new H.service.Url.MultiValueQueryParameter(routingParameters.via);
-    var routeInstructionsContainer = document.getElementById('panel');
+
+    
+
     // Obtain the default map types from the platform object
     var maptypes = platform.createDefaultLayers();
 
@@ -30,9 +32,11 @@
     * @param {Object} route A route as received from the H.service.RoutingService
     */
     function addWaypointsToPanel(route) {
+    console.log("adding waypoints");
     var nodeH3 = document.createElement('h3'),
         labels = [];
-
+    
+    console.log(route);
     route.sections.forEach((section) => {
         labels.push(
         section.turnByTurnActions[0].nextRoad.name[0].value)
@@ -41,9 +45,14 @@
     });
 
     nodeH3.textContent = labels.join(' - ');
+    console.log(routeInstructionsContainer)
     routeInstructionsContainer.innerHTML = '';
     routeInstructionsContainer.appendChild(nodeH3);
+    console.log(routeInstructionsContainer);
     }
+    function toMMSS(duration) {
+  return Math.floor(duration / 60) + ' minutes ' + (duration % 60) + ' seconds.';
+}
 
     /**
     * Creates a series of H.map.Marker points from the route and adds them to the map.
@@ -82,7 +91,7 @@
         // Enable the event system on the map instance:
         var mapEvents = new H.mapevents.MapEvents(map);
         
-
+        var routeInstructionsContainer;
     // Define a callback function to process the routing response:
     var onResult = function(result) {
         // ensure that at least one route was found
@@ -109,10 +118,11 @@
                 map.getViewModel().setLookAtData({bounds: routeLine.getBoundingBox()});
             });
             
+            console.log("adding stuff");
+            routeInstructionsContainer = document.getElementById('panel');
+            addWaypointsToPanel(result.routes[0]);
+            addSummaryToPanel(result.routes[0]);
         }
-        
-        addWaypointsToPanel(result.routes[0]);
-        addSummaryToPanel(result.routes[0]);
     };
 
 	// Instantiate the default behavior, providing the mapEvents object:
@@ -139,12 +149,13 @@
 
     // Get an instance of the search service:
     var service = platform.getSearchService();
-    
+    var labels = new Array;
+    var nodeH3 = document.createElement('h3');
     for (var destination in routingParameters)
     {
         console.log(i);
         console.log(destination);
-        if(typeof(routingParameters[destination]) == 'string' && routingParameters[destination].indexOf(",") > -1)
+        if(typeof(routingParameters[destination]) == 'string' && routingParameters[destination].indexOf(",") > -1 && /\d/.test(routingParameters[destination]))
         {
             groups[i] = new H.map.Group();
         map.addObject(groups[i]);
@@ -154,7 +165,10 @@
             service.reverseGeocode({
             at: routingParameters[destination]
             }, (result) => {
-                console.log(i);
+                var nodeH3 = document.createElement('h3'),
+                labels = [];
+
+                
             console.log(markers);
             result.items.forEach((item) => {
                 // Assumption: ui is instantiated
@@ -162,7 +176,7 @@
                 // the address as its contents:
                 console.log(item)
                 console.log(markers[i])
-                markers[i].setData(item.address.label);
+                labels.push(item.address.label)
             });
             }, alert);
             
@@ -203,8 +217,8 @@
                         // Assumption: ui is instantiated
                         // Create an InfoBubble at the returned location with
                         // the address as its contents:
+                        labels.push(item.address.label)
                         console.log(item)
-                        markers[i].setData(item.address.label);
                     });
                 }, alert);
                 
@@ -224,11 +238,15 @@
             }
         }
     }
-
+    console.log(labels)
+    nodeH3.textContent = labels.join(' - ');
+                routeInstructionsContainer.innerHTML = '';
+                routeInstructionsContainer.appendChild(nodeH3);
     console.log(markers)
     console.log(map)
     console.log(groups)
 	console.log(bubbles)
+    
 
 </script>
 <div id="panel"></div>

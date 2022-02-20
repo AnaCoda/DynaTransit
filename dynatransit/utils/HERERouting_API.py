@@ -46,7 +46,7 @@ def findSequence(pointsList):
     print(waypoints)
     wayArr = {'routingMode': 'fast',
     'transportMode': 'car',
-    'return': 'polyline'}
+    'return': 'polyline,turnByTurnActions,actions,instructions,travelSummary'}
     for p in waypoints:
         wayArr[p['id']] = f"{p['lat']},{p['lng']}"
     wayArr["origin"] = wayArr.pop("start")
