@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   overflow: hidden;
+  font-family: "Jost", sans-serif;
 }
 .two-grid
 {
@@ -10,6 +11,7 @@
     grid-template-columns: 50vw 50vw;
     margin: 3px;
 }
+
 .centered-middle
 {
   /* set the vertical alignment to middle and the horizontal alignment to the middle */
@@ -21,17 +23,17 @@
 }
 .map-information
 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 10px;
-    margin: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px;
+  margin: 10px;
 }
 .title
 {
-  font-size: 2.5em;
+  font-size: 4em;
   font-weight: 400;
   text-align: center;
-  letter-spacing:-3px;
+  letter-spacing: -2px;
 }
 .image-fullheight
 {
@@ -47,7 +49,7 @@
 }
 .homepage-button
 {
-  background-color: #368538;
+  background-color: #13D478;
   border-radius: 12px;
   height: 20%;
   width: 100%;
@@ -55,11 +57,17 @@
 }
 .homepage-button:hover
 {
-  background-color: #2d8331;
+  background-color: #49eb6c;
 }
 .right-side
 {
   position: absolute;
   right: 0;
+  top: 0;
+}
 
+@media only screen and (max-width: 1024px) {
+  .right-side {
+    display: none;
+  }
 }
