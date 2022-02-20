@@ -22,16 +22,16 @@ class RegistrationForm(FlaskForm):
 
 
 class FindTrip(FlaskForm):
-    start = StringField ('From Address:',validators=[DataRequired()])
-    end = StringField('To Address:', validators=[DataRequired()])
+    start = StringField ('From Address:')
+    end = StringField('To Address:')
     
-    startTimeFrom = TimeField('Departure Time From:',format='%H-%M', validators=[DataRequired()])
-    startTimeTo = TimeField('Departure Time To:',format='%H-%M', validators=[DataRequired()])
+    startTimeFrom = TimeField('Departure Time From:')
+    startTimeTo = TimeField('Departure Time To:')
    
-    arrivalTimeFrom = TimeField('Arrival Time From:',format='%H-%M', validators=[DataRequired()])
-    arrivalTimeTo = TimeField('Arrival Time To:',format='%H-%M', validators=[DataRequired()])
+    arrivalTimeFrom = TimeField('Arrival Time From:')
+    arrivalTimeTo = TimeField('Arrival Time To:')
    
-    date  = DateField('Date',format='%Y-%m-%d', validators=[DataRequired()])
+    date  = DateField('Date',format='%Y-%m-%d')
     
     submit = SubmitField('Find a Trip') 
 

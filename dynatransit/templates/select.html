@@ -12,10 +12,10 @@
 {% endwith %}
 <!-- get the input from the user form and send it to the map url -->
 <div class="centered-middle">
-    <h1>Find the Best Bus Trip</h1>
+    <h1>Trip Planner</h1>
         <form action="" method="POST">
+            {{ form.hidden_tag() }}
             <fieldset class = "form-group">
-                <legend class = "border-bottom mb-4">Find the Best Bus Trip</legend>
                 <div class = "form-group">
                     {{ form.start.label(class="form-control-label") }}
                     {% if form.start.errors %}
