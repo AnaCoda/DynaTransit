@@ -58,7 +58,7 @@
                 let endMarker = new H.map.Marker(section.arrival.place.location);
 
                 // Add the route polyline and the two markers to the map:
-                map.addObjects([routeLine, startMarker, endMarker]);
+                map.addObjects([routeLine]);
 
                 // Set the map's viewport to make the whole route visible:
                 map.getViewModel().setLookAtData({bounds: routeLine.getBoundingBox()});
@@ -87,52 +87,88 @@
     var bubbles = new Array;
     var groups = new Array;
     var i = 0;
+
+    // Get an instance of the search service:
+    var service = platform.getSearchService();
+    
     for (var destination in routingParameters)
     {
-        groups[i] = new H.map.Group();
-        map.addObject(groups[i]);
-        console.log(routingParameters[destination])
+        console.log(i);
+        console.log(destination);
         if(typeof(routingParameters[destination]) == 'string' && routingParameters[destination].indexOf(",") > -1)
         {
+            groups[i] = new H.map.Group();
+        map.addObject(groups[i]);
+        console.log(destination);
+        console.log(routingParameters[destination])
             markers[i] = new H.map.Marker({ lat: routingParameters[destination].split(",")[0], lng: routingParameters[destination].split(",")[1]});
-            markers[i].setData(destination);
+            service.reverseGeocode({
+            at: routingParameters[destination]
+            }, (result) => {
+                console.log(i);
+            console.log(markers);
+            result.items.forEach((item) => {
+                // Assumption: ui is instantiated
+                // Create an InfoBubble at the returned location with
+                // the address as its contents:
+                console.log(item)
+                console.log(markers[i])
+                markers[i].setData(item.address.label);
+            });
+            }, alert);
             
             // add 'tap' event listener, that opens info bubble, to the group
             groups[i].addEventListener('tap', function (evt) {
-                console.log(markers[i]);
+                console.log('tapped');
+                console.log(evt.target.getData())
                 // event target is the marker itself, group is a parent event target
                 // for all objects that it contains
-                bubbles[i] = new H.ui.InfoBubble(evt.target.getGeometry(), {
+                var bubble = (new H.ui.InfoBubble(evt.target.getGeometry(), {
                 // read custom data
-                content: 'hello'
-                });
+                content: evt.target.getData()
+                }));
                 // show info bubble
-                ui.addBubble(bubbles[i]);
+                ui.addBubble(bubble);
             }, false);
             groups[i].addObject(markers[i]);
             i++;
         }
         else if(Array.isArray(routingParameters[destination]))
         {
+            console.log(i)
             groups[i] = new H.map.Group();
             map.addObject(groups[i]);
             for (var location in routingParameters[destination])
             {
                 console.log(location);
                 markers[i] = new H.map.Marker({ lat: routingParameters[destination].split(",")[0], lng: routingParameters[destination].split(",")[1]});
-                markers[i].setData(destination);
+                // Assumption: ui is instantiated
+                // Create an InfoBubble at the returned location with
+                // the address as its contents:
+                console.log(item)
+                service.reverseGeocode({
+                    at: routingParameters[destination]
+                    }, (result) => {
+
+                    result.items.forEach((item) => {
+                        // Assumption: ui is instantiated
+                        // Create an InfoBubble at the returned location with
+                        // the address as its contents:
+                        console.log(item)
+                        markers[i].setData(item.address.label);
+                    });
+                }, alert);
                 
                 // add 'tap' event listener, that opens info bubble, to the group
                 groups[i].addEventListener('tap', function (evt) {
-                    console.log(markers[i]);
                     // event target is the marker itself, group is a parent event target
                     // for all objects that it contains
-                    bubbles[i] = new H.ui.InfoBubble(evt.target.getGeometry(), {
+                    var bubble = (new H.ui.InfoBubble(evt.target.getGeometry(), {
                     // read custom data
                     content: evt.target.getData()
-                    });
+                    }));
                     // show info bubble
-                    ui.addBubble(bubbles[i]);
+                    ui.addBubble(bubble);
                 }, false);
                 groups[i].addObject(markers[i]);
                 i++;
@@ -142,7 +178,8 @@
 
     console.log(markers)
     console.log(map)
-	
+    console.log(groups)
+	console.log(bubbles)
 
 </script>
 </body>

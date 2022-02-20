@@ -43,6 +43,7 @@ def findSequence(pointsList):
     # r = requests.get(self.sequence_url, app_data)
 
     waypoints = r.json()['results'][0]['waypoints']
+    print(waypoints)
     wayArr = {'routingMode': 'fast',
     'transportMode': 'car',
     'return': 'polyline'}
@@ -50,6 +51,7 @@ def findSequence(pointsList):
         wayArr[p['id']] = f"{p['lat']},{p['lng']}"
     wayArr["origin"] = wayArr.pop("start")
     wayArr["destination"] = wayArr.pop("end")
+    wayArr.pop("destination1")
     viaList = []
     for key in wayArr:
         if key not in ['origin', 'destination', 'routingMode', 'transportMode', 'return']:
