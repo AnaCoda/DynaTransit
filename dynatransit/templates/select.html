@@ -34,7 +34,7 @@
 {% endif %}
 {% endwith %}
 
-<svg class = "top-left-corner-item" width="700" height="566" viewBox="0 0 700 566" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg style = "width:80%;height:80%;left: -25vh" class = "top-left-corner-item" width="700" height="566" viewBox="0 0 700 566" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M328.466 -215L377.076 -183.815L-103.39 565.106L-152 533.921L328.466 -215Z" fill="#13D478"/>
     <path d="M117.961 -383L307.339 -261.505L-117.622 400.897L-307 279.403L117.961 -383Z" fill="#8AE39D"/>
 </svg>
@@ -45,8 +45,7 @@
         <form action="" method="POST">
             {{ form.hidden_tag() }}
             <fieldset class = "form-group" style="
-            height: 80vh;
-            ">
+            height: 80vh;">
                 <div class = "form-group">
                     {{ form.start.label(class="form-control-label") }}
                     {% if form.start.errors %}
