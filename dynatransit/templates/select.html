@@ -10,7 +10,12 @@
     {% endfor %}
 {% endif %}
 {% endwith %}
+<svg class = "top-left-corner-item" width="700" height="566" viewBox="0 0 700 566" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M328.466 -215L377.076 -183.815L-103.39 565.106L-152 533.921L328.466 -215Z" fill="#13D478"/>
+    <path d="M117.961 -383L307.339 -261.505L-117.622 400.897L-307 279.403L117.961 -383Z" fill="#8AE39D"/>
+    </svg>
 <!-- get the input from the user form and send it to the map url -->
+<div class="two-grid">
 <div class="centered-middle">
     <h1>Trip Planner</h1>
         <form action="" method="POST">
@@ -109,7 +114,11 @@
                 </div>   
             </fieldset>
         <div class = "form-group">
-            {{ form.submit(class="btn btn-primary") }}
+            {{ form.submit(class="btn btn-primary mt-2") }}
         </form>
+</div>
+</div>
+<div class = "right-panel">
+    
 </div>
 {% endblock content %}

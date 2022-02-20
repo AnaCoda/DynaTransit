@@ -86,3 +86,11 @@
     display: none;
   }
 }
+
+.btn-primary {
+  background: rgb(19, 212, 120);
+}
+
+.form-group input {
+  border: rgb(19, 212, 120) solid 3px;
+}
